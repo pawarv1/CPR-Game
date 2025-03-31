@@ -352,6 +352,8 @@
 -analyzer:"/Applications/Unity/Hub/Editor/2022.3.39f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"/Applications/Unity/Hub/Editor/2022.3.39f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/PlayerController.cs"
+"Assets/Timer.cs"
+"Assets/VictimController.cs"
 -langversion:9.0
 /deterministic
 /optimize+
