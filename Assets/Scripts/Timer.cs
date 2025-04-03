@@ -12,7 +12,7 @@ public class Timer : MonoBehaviour
     void Start()
     {
         float timer = 0f;
-        timeTillEMTS = 60f;
+        timeTillEMTS = 10f;
         Debug.Log(timeTillEMTS - timer);
     }
 
