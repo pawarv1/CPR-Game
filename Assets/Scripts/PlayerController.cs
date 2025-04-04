@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     private Animator animator;
+    private Vector2 moveInput;
+    private PlayerInput playerInput;
+
     
     void Start()
     {
@@ -16,8 +20,8 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        float horizontalInput = moveInput.x;
+        float verticalInput = moveInput.y;
         animator.SetFloat("Blend",horizontalInput);
         animator.SetFloat("BlendY", verticalInput);
         
@@ -42,4 +46,7 @@ public class PlayerController : MonoBehaviour
     
         }
     }
+
+    public void OnMove(InputAction.CallbackContext context) => moveInput = context.ReadValue<Vector2>();
+
 }
