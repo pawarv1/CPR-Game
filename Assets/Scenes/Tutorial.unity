@@ -394,6 +394,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  headset: {fileID: 660327749}
+  controller: {fileID: 200271159}
 --- !u!114 &200271158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +442,32 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!143 &200271159
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200271153}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &226660680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,6 +1748,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8e7c5167475e4a1da1a6dc36970d39d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 200271158}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8e7c5167475e4a1da1a6dc36970d39d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 200271159}
   m_SourcePrefab: {fileID: 100100000, guid: d8e7c5167475e4a1da1a6dc36970d39d, type: 3}
 --- !u!1 &963194225
 GameObject:
