@@ -17,6 +17,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/VRTest.unity
     guid: 090e33313babf844e9dce95c73add06e
+  - enabled: 1
+    path: Assets/Scenes/Drowning.unity
+    guid: 3061cc644a4fe4761bdaf61cc2df1ab3
+  - enabled: 1
+    path: Assets/Scenes/HeartAttack.unity
+    guid: e614f8ae8d0ac454b9aa7cb34d60ca83
+  - enabled: 1
+    path: Assets/Scenes/Choking.unity
+    guid: 66f06d41757424f02a754f6fc6bff827
+  - enabled: 1
+    path: Assets/Scenes/Smoke.unity
+    guid: 049bfa405cc884f9bab19c79c7b39b1b
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 59fe2a330f1083c47bd66b42b3e4fb38, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 3529d75b11f3d1e40824ebf958bab31c, type: 2}
