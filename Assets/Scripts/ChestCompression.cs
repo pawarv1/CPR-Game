@@ -1,48 +1,96 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using TMPro;
 
 public class ChestCompression : MonoBehaviour
 {
-    public Transform controller; // drag the hand/controller into this
-    public float compressionThreshold = 0.05f; // minimum distance to count as compression
-    public float resetThreshold = 0.02f; // distance to reset after a compression
+    public Transform headset;               // Assign VR camera (CenterEyeAnchor)
+     public Transform controller; 
+    public Collider chestCollider;
+    public PlayerInput playerInput;
+    public TextMeshProUGUI compressionText;
+    public TextMeshProUGUI debugText;
+    public TextMeshProUGUI debugText2;
+
+    public float leanInOffset = 0.3f;       // How far to move down
+    public KeyCode leanInKey = KeyCode.Space; // Replace with button mapping if needed
+    private bool hasLeanedIn = false;
+
+    public float compressionThreshold = 0.01f;
+    public float resetThreshold = 0.02f;
 
     private float lastY;
     private bool readyForNextCompression = true;
     private int compressionCount = 0;
-    public Collider chestCollider;
+    private float lastControllerY;
 
-
-
-    void Start() {
-        lastY = controller.position.y;
+    void Start()
+    {
+        if (headset != null)
+            lastY = headset.localPosition.y;
     }
 
-    void Update() {
-        float currentY = controller.position.y;
-        float deltaY = lastY - currentY;
+    void Update()
+    {
 
-        if (deltaY > compressionThreshold && readyForNextCompression) {
-            RegisterCompression();
-            readyForNextCompression = false;
+        Debug.Log("Controller Y: " + controller.position.y);
+        debugText.text = "Controller Y: " + controller.position.y.ToString("F2");
+
+        compressionText.text = compressionCount.ToString();
+
+        // Lean-in check
+        if (!hasLeanedIn &&
+            (
+             playerInput.actions["Action"].WasPressedThisFrame()))
+        {
+            LeanIn();
         }
 
-        // Reset if hand goes back up
-        if (controller.position.y - lastY > resetThreshold) {
-            readyForNextCompression = true;
-        }
+        if (!hasLeanedIn) return;
 
-        lastY = currentY;
+        float currentControllerY = controller.position.y;
+        float deltaY = lastControllerY - currentControllerY;
+
+        // Optional: Uncomment if you want to check if the controller is over the chest
+        // if (chestCollider.bounds.Contains(controller.position))
+        // {
+            if (deltaY > compressionThreshold && readyForNextCompression)
+            {
+                RegisterCompression();
+                readyForNextCompression = false;
+            }
+
+            if (currentControllerY - lastControllerY > resetThreshold)
+            {
+                readyForNextCompression = true;
+            }
+        // }
+
+        lastControllerY = currentControllerY;
+
+        Debug.Log("Controller Y: " + controller.position.y + " Delt " + deltaY);
+        // debugText.text = "Controller Y: " + controller.position.y;//.ToString("F2");
+        debugText2.text = "Delt " + deltaY.ToString("F2");
     }
 
-    void RegisterCompression() {
+    void LeanIn()
+    {
+        headset.localPosition -= new Vector3(0, leanInOffset, 0);
+        hasLeanedIn = true;
+        Debug.Log("Leaning in toward patient.");
+    }
+
+    void RegisterCompression()
+    {
         compressionCount++;
-        Debug.LogWarning("Compression #" + compressionCount);
-        // Optional: play sound, animate chest, give feedback, etc.
+        Debug.Log($"Compression #{compressionCount}");
+        // Add feedback here (animation, sound, etc.)
     }
 
-    bool IsOverChest() => chestCollider.bounds.Contains(controller.position);
-
-
+    bool IsOverChest(Vector3 position)
+    {
+        return chestCollider.bounds.Contains(position);
+    }
 }
