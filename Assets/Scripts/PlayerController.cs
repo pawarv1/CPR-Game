@@ -52,14 +52,14 @@ public class PlayerController : MonoBehaviour
         // float movementMagnitude = movement.magnitude;
         // animator.SetFloat("Speed", movementMagnitude);
         
-        if (playerInput.actions["Action"].WasPressedThisFrame())
-        {
-            animator.SetTrigger("isGivingCPR");
-        }
-        else
-        {
+        // if (playerInput.actions["Action"].WasPressedThisFrame())
+        // {
+        //     animator.SetTrigger("isGivingCPR");
+        // }
+        // else
+        // {
     
-        }
+        // }
     }
 
     public void OnMove(InputAction.CallbackContext context) => moveInput = context.ReadValue<Vector2>();

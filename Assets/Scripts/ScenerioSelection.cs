@@ -44,6 +44,6 @@ public class ScenarioSelection : MonoBehaviour
 
     private void ExitGame()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
+        // UnityEditor.EditorApplication.isPlaying = false;
     }
 }

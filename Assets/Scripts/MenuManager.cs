@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour
 
     private void ExitGame()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
+        // UnityEditor.EditorApplication.isPlaying = false;
     }
 
     private void OnDestroy()
