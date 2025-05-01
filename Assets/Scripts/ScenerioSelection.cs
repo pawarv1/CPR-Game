@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class ScenarioSelection : MonoBehaviour
 {
-    [SerializeField] private Button exitButton;
     [SerializeField] private Button selectHeartAttack;
     [SerializeField] private Button selectDrowning;
     [SerializeField] private Button selectChoking;
@@ -15,7 +14,6 @@ public class ScenarioSelection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        exitButton.onClick.AddListener(ExitGame);
         selectHeartAttack.onClick.AddListener(LoadHeartAttack);
         selectDrowning.onClick.AddListener(LoadDrowning);
         selectChoking.onClick.AddListener(LoadChoking);
@@ -40,10 +38,5 @@ public class ScenarioSelection : MonoBehaviour
     private void LoadSmoke()
     {
         SceneManager.LoadScene("Smoke");
-    }
-
-    private void ExitGame()
-    {
-        // UnityEditor.EditorApplication.isPlaying = false;
     }
 }

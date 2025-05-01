@@ -65,9 +65,11 @@
     <Compile Include="Assets/Scripts/ChestCompression.cs" />
     <Compile Include="Assets/FastMesh/Scripts/SceneViewText.cs" />
     <Compile Include="Assets/Mirza Beig/Particle Systems/_Common/Scripts/_Demo/DemoManager.cs" />
+    <Compile Include="Assets/Scripts/MiniGameScript.cs" />
     <Compile Include="Assets/Mirza Beig/Particle Systems/_Common/Scripts/_Demo/LoopingParticleSystemsManager.cs" />
     <Compile Include="Assets/Scripts/Timer.cs" />
     <Compile Include="Assets/Mirza Beig/Particle Systems/_Common/Scripts/_Demo/FPSTest.cs" />
+    <Compile Include="Assets/Scripts/MinigameMenu.cs" />
     <Compile Include="Assets/Mirza Beig/Particle Systems/_Common/Scripts/AnimatedLight.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />
     <Compile Include="Assets/Mirza Beig/Particle Systems/_Common/Scripts/_Demo/FPSDisplay.cs" />

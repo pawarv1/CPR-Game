@@ -5,32 +5,37 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] private Button tutorialButton;
+    [SerializeField] private Button minigameButton;
     [SerializeField] private Button freePlayButton;
-    [SerializeField] private Button exitButton;
     [SerializeField] private GameObject startMenu;
+    [SerializeField] private GameObject minigameMenu;
     [SerializeField] private GameObject freePlayMenu;
 
 
     private void Start()
     {
+        freePlayMenu.SetActive(false);
+        minigameMenu.SetActive(false);
         tutorialButton.onClick.AddListener(LoadTutorialScene);
+        minigameButton.onClick.AddListener(openMinigameMenu);
         freePlayButton.onClick.AddListener(OpenScenarioSelect);
-        exitButton.onClick.AddListener(ExitGame);
     }
+
     private void LoadTutorialScene()
     {
         SceneManager.LoadScene("Tutorial");
+    }
+
+    private void openMinigameMenu()
+    {
+        startMenu.SetActive(false);
+        minigameMenu.SetActive(true);
     }
 
     private void OpenScenarioSelect()
     {
         startMenu.SetActive(false);
         freePlayMenu.SetActive(true);
-    }
-
-    private void ExitGame()
-    {
-        // UnityEditor.EditorApplication.isPlaying = false;
     }
 
     private void OnDestroy()
