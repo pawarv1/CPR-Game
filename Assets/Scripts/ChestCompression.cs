@@ -26,6 +26,13 @@ public class ChestCompression : MonoBehaviour
     private int compressionCount = 0;
     private float lastControllerY;
 
+    public TextMeshProUGUI feedbackText;
+
+    public float minCompressionInterval = 0.5f;  // 100 cpm
+    public float maxCompressionInterval = 0.6f;  // 120 cpm
+
+    private float lastCompressionTime = -1f;
+
     void Start()
     {
         if (headset != null)
@@ -82,11 +89,45 @@ public class ChestCompression : MonoBehaviour
         Debug.Log("Leaning in toward patient.");
     }
 
+    // void RegisterCompression()
+    // {
+    //     compressionCount++;
+    //     Debug.Log($"Compression #{compressionCount}");
+    //     // Add feedback here (animation, sound, etc.)
+    // }
     void RegisterCompression()
     {
         compressionCount++;
+        float currentTime = Time.time;
+
+        if (lastCompressionTime > 0f)
+        {
+            float interval = currentTime - lastCompressionTime;
+            if (interval >= minCompressionInterval && interval <= maxCompressionInterval)
+            {
+                feedbackText.text = "Good!";
+                feedbackText.color = Color.green;
+            }
+            else if (interval < minCompressionInterval)
+            {
+                feedbackText.text = "Too Fast!";
+                feedbackText.color = Color.yellow;
+            }
+            else
+            {
+                feedbackText.text = "Too Slow!";
+                feedbackText.color = Color.red;
+            }
+        }
+        else
+        {
+            feedbackText.text = "Start!";
+            feedbackText.color = Color.white;
+        }
+
+        lastCompressionTime = currentTime;
+
         Debug.Log($"Compression #{compressionCount}");
-        // Add feedback here (animation, sound, etc.)
     }
 
     bool IsOverChest(Vector3 position)
