@@ -50,6 +50,15 @@ public class ChestCompression : MonoBehaviour
     // private float sessionStartTime;
     private bool sessionEnded = false;
 
+    public TextMeshProUGUI goodText;
+    public TextMeshProUGUI fastText;
+    public TextMeshProUGUI slowText;
+    public TextMeshProUGUI mouthText;
+    public TextMeshProUGUI percentText;
+
+    [SerializeField] bool gameStart = true;
+    [SerializeField] GameObject tutorialMenu;
+
 
 
 
@@ -65,20 +74,25 @@ public class ChestCompression : MonoBehaviour
 
     void Update()
     {
+        if (tutorialMenu != null && playerInput.actions["Action"].WasPressedThisFrame()) {
+            tutorialMenu.SetActive(false);
+            gameStart = true;
+        }
 
-        Debug.Log("Controller Y: " + controller.position.y);
+        if (!gameStart) return;
+
 
         compressionText.text = "Compressions: " + compressionCount.ToString();
 
         // Lean-in check
-        if (!hasLeanedIn &&
-            (
-             playerInput.actions["Action"].WasPressedThisFrame()))
-        {
-            LeanIn();
-        }
+        // if (!hasLeanedIn &&
+        //     (
+        //      playerInput.actions["Action"].WasPressedThisFrame()))
+        // {
+        //     LeanIn();
+        // }
 
-        if (!hasLeanedIn) return;
+        // if (!hasLeanedIn) return;
 
         float currentControllerY = controller.position.y;
         float deltaY = lastControllerY - currentControllerY;
@@ -105,9 +119,7 @@ public class ChestCompression : MonoBehaviour
 
         lastControllerY = currentControllerY;
 
-        Debug.Log("Controller Y: " + controller.position.y + " Delt " + deltaY);
-        debugText.text = "Controller Y: " + controller.position.y;//.ToString("F2");
-        // debugText2.text = "Delt " + deltaY.ToString("F2");
+     
     }
 
     void LeanIn()
@@ -184,6 +196,7 @@ public class ChestCompression : MonoBehaviour
     IEnumerator MouthToMouthSuccess()
     {
         tempCompressionCount = 0;
+        mouthToMouthSuccesses++;
         TriggerHaptic(1f, 0.2f);
         mouthToMouthText.text = "Success!";
         mouthToMouthText.color = Color.green;
@@ -201,5 +214,17 @@ public class ChestCompression : MonoBehaviour
             xrController.SendHapticImpulse(amplitude, duration);
         }
     }
+
+    public bool GetGameStart() => gameStart;
+    public void SetGameStart() => gameStart = false;
+
+    // void ShowScore() {
+    //     goodText.text = "Good: " + goodCompressions;
+    //     fastText.text = "Fast: " + fastCompressions;
+    //     slowText.text = "Slow: " + slowCompressions;
+    //     mouthText.text = "Mouth Successes: " + mouthToMouthSuccesses;
+
+    //     // float score = 
+    // }
 
 }

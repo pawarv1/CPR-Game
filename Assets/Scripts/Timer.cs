@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
@@ -25,9 +27,12 @@ public class Timer : MonoBehaviour
     public string yell = "Yell";
     public GameObject button;
     public GameObject performancePanel;
+    private List<UnityEngine.XR.InputDevice> inputDevices = new List<UnityEngine.XR.InputDevice>();
 
-    private List<InputDevice> inputDevices = new List<InputDevice>();
     private bool bystandersActive = false;
+    public Slider emtTimerSlider;
+    [SerializeField] ChestCompression chestCompression;
+    [SerializeField] PlayerInput playerInput;
 
     void Start()
     {
@@ -44,13 +49,18 @@ public class Timer : MonoBehaviour
                 Debug.Log("Found controller: " + device.name);
             }
         }
+
+        emtTimerSlider.maxValue = timeTillEMTS;
+        emtTimerSlider.value = 0f;
     }
 
     void Update()
     {
-        if (timeTillEMTS - timer > 0)
+        
+        if (timeTillEMTS - timer > 0 && chestCompression.GetGameStart())
         {
             timer += Time.deltaTime;
+            emtTimerSlider.value = timer;
             Debug.Log("Time remaining: " + (timeTillEMTS - timer));
         }
         
@@ -77,6 +87,7 @@ public class Timer : MonoBehaviour
         
         if (timer >= timeTillEMTS && !ambulanceInstantiated)
         {
+
             instantiatedAmbulance = Instantiate(ambulance, spawnPoint.transform.position, spawnRotation);
             AudioSource audioSource = instantiatedAmbulance.GetComponent<AudioSource>();
             if (audioSource == null)
@@ -110,6 +121,10 @@ public class Timer : MonoBehaviour
             mouthSuccessText.text += ChestCompression.mouthToMouthSuccesses;
 
             performancePanel.SetActive(true);
+            chestCompression.SetGameStart();
+            if (playerInput.actions["Action"].WasPressedThisFrame()) {
+                SceneManager.LoadScene("MenuScreen");
+            }
         }
 
         if (ambulanceInstantiated && instantiatedAmbulance != null)
@@ -123,26 +138,20 @@ public class Timer : MonoBehaviour
     {
         if (inputDevices.Count == 0)
         {
-            InputDevices.GetDevices(inputDevices);
+            UnityEngine.XR.InputDevices.GetDevices(inputDevices);
         }
-        
-        foreach (var device in inputDevices)
+
+        foreach (UnityEngine.XR.InputDevice device in inputDevices)
         {
-            if (device.characteristics.HasFlag(InputDeviceCharacteristics.Controller))
+            if (device.characteristics.HasFlag(UnityEngine.XR.InputDeviceCharacteristics.Controller))
             {
                 bool primaryButtonPressed = false;
                 bool secondaryButtonPressed = false;
-                
-                device.TryGetFeatureValue(CommonUsages.primaryButton, out primaryButtonPressed);
-                device.TryGetFeatureValue(CommonUsages.secondaryButton, out secondaryButtonPressed);
-                
-                if (primaryButtonPressed)
-                {
-                    DeleteBystanders();
-                    return;
-                }
-                
-                if (secondaryButtonPressed)
+
+                device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out primaryButtonPressed);
+                device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButtonPressed);
+
+                if (primaryButtonPressed || secondaryButtonPressed)
                 {
                     DeleteBystanders();
                     return;
@@ -150,6 +159,7 @@ public class Timer : MonoBehaviour
             }
         }
     }
+
     
     private void ActivateObjectsWithAnimation()
     {
