@@ -28,19 +28,19 @@ public class PlayerController : MonoBehaviour
         // animator.SetFloat("Blend",horizontalInput);
         // animator.SetFloat("BlendY", verticalInput);
 
-        Vector3 headForward = headset.forward;
-        Vector3 headRight = headset.right;
+        // Vector3 headForward = headset.forward;
+        // Vector3 headRight = headset.right;
 
-        headForward.y = 0f;
-        headRight.y = 0f;
-        headForward.Normalize();
-        headRight.Normalize();
+        // headForward.y = 0f;
+        // headRight.y = 0f;
+        // headForward.Normalize();
+        // headRight.Normalize();
         
         // Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
 
-        Vector3 move = headForward * moveInput.y + headRight * moveInput.x;
+        // Vector3 move = headForward * moveInput.y + headRight * moveInput.x;
 
-        controller.Move(move * speed * Time.deltaTime);
+        // controller.Move(move * speed * Time.deltaTime);
         
         // if (movement.magnitude > 0)
         // {
