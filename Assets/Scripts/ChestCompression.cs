@@ -12,7 +12,7 @@ public class ChestCompression : MonoBehaviour
     public PlayerInput playerInput;
     public TextMeshProUGUI compressionText;
     public TextMeshProUGUI debugText;
-    public TextMeshProUGUI debugText2;
+    // public TextMeshProUGUI debugText2;
 
     public float leanInOffset = 0.3f;       // How far to move down
     public KeyCode leanInKey = KeyCode.Space; // Replace with button mapping if needed
@@ -24,6 +24,7 @@ public class ChestCompression : MonoBehaviour
     private float lastY;
     private bool readyForNextCompression = true;
     private int compressionCount = 0;
+    private int tempCompressionCount = 0; // Seperate compression count to help with mouth functionality
     private float lastControllerY;
 
     public TextMeshProUGUI feedbackText;
@@ -33,19 +34,28 @@ public class ChestCompression : MonoBehaviour
 
     private float lastCompressionTime = -1f;
 
+    public TextMeshProUGUI mouthToMouthText;
+    // public string mouthToMouthKey = "Submit"; // Assign to a button in Input Actions
+
+    private bool waitingForMouthToMouth = false;
+
+
     void Start()
     {
         if (headset != null)
             lastY = headset.localPosition.y;
+        debugText.text = "UGHHHH";
+        mouthToMouthText.text = "";
+
+        
     }
 
     void Update()
     {
 
         Debug.Log("Controller Y: " + controller.position.y);
-        debugText.text = "Controller Y: " + controller.position.y.ToString("F2");
 
-        compressionText.text = compressionCount.ToString();
+        compressionText.text = "Compressions: " + compressionCount.ToString();
 
         // Lean-in check
         if (!hasLeanedIn &&
@@ -59,6 +69,11 @@ public class ChestCompression : MonoBehaviour
 
         float currentControllerY = controller.position.y;
         float deltaY = lastControllerY - currentControllerY;
+
+        if (waitingForMouthToMouth && playerInput.actions["Action"].WasPressedThisFrame())
+        {
+            StartCoroutine(MouthToMouthSuccess());
+        }
 
         // Optional: Uncomment if you want to check if the controller is over the chest
         // if (chestCollider.bounds.Contains(controller.position))
@@ -78,8 +93,8 @@ public class ChestCompression : MonoBehaviour
         lastControllerY = currentControllerY;
 
         Debug.Log("Controller Y: " + controller.position.y + " Delt " + deltaY);
-        // debugText.text = "Controller Y: " + controller.position.y;//.ToString("F2");
-        debugText2.text = "Delt " + deltaY.ToString("F2");
+        debugText.text = "Controller Y: " + controller.position.y;//.ToString("F2");
+        // debugText2.text = "Delt " + deltaY.ToString("F2");
     }
 
     void LeanIn()
@@ -98,6 +113,7 @@ public class ChestCompression : MonoBehaviour
     void RegisterCompression()
     {
         compressionCount++;
+        tempCompressionCount++;
         float currentTime = Time.time;
 
         if (lastCompressionTime > 0f)
@@ -127,11 +143,34 @@ public class ChestCompression : MonoBehaviour
 
         lastCompressionTime = currentTime;
 
+        if (tempCompressionCount >= 30) {
+            TriggerMouthToMouth();
+        }
+
         Debug.Log($"Compression #{compressionCount}");
     }
 
     bool IsOverChest(Vector3 position)
     {
         return chestCollider.bounds.Contains(position);
+    }
+
+    void TriggerMouthToMouth()
+    {
+        mouthToMouthText.text = "Give Mouth-to-Mouth! Press [Submit]";
+        mouthToMouthText.color = Color.cyan;
+        waitingForMouthToMouth = true;
+    }
+
+    IEnumerator MouthToMouthSuccess()
+    {
+        tempCompressionCount = 0;
+        mouthToMouthText.text = "Success!";
+        mouthToMouthText.color = Color.green;
+        waitingForMouthToMouth = false;
+
+        yield return new WaitForSeconds(3f);
+
+        mouthToMouthText.text = "";
     }
 }
