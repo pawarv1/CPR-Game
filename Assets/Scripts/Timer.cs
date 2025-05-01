@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
+using TMPro;
 
 public class Timer : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class Timer : MonoBehaviour
     public GameObject firstByStander;
     public GameObject secondByStander;
     private float timer = 0f;
-    private float timeTillEMTS = 30f; 
+    private float timeTillEMTS = 30f; //Random.Range(30f, 60f);
     private bool ambulanceInstantiated = false;
     private GameObject instantiatedAmbulance;
     private float moveSpeed = 0.1f;
@@ -23,12 +24,14 @@ public class Timer : MonoBehaviour
     public string scared = "Scared";
     public string yell = "Yell";
     public GameObject button;
-    
+    public GameObject performancePanel;
+
     private List<InputDevice> inputDevices = new List<InputDevice>();
     private bool bystandersActive = false;
 
     void Start()
     {
+        performancePanel.SetActive(false);
         Debug.Log("Time remaining: " + (timeTillEMTS - timer));
         if (firstByStander != null) firstByStander.SetActive(false);
         if (secondByStander != null) secondByStander.SetActive(false);
@@ -45,8 +48,11 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
-        Debug.Log("Time remaining: " + (timeTillEMTS - timer));
+        if (timeTillEMTS - timer > 0)
+        {
+            timer += Time.deltaTime;
+            Debug.Log("Time remaining: " + (timeTillEMTS - timer));
+        }
         
         if (bystandersActive)
         {
@@ -86,6 +92,24 @@ public class Timer : MonoBehaviour
             }
             Debug.Log("Paramedics have arrived!!");
             ambulanceInstantiated = true;
+
+            Transform child = performancePanel.transform.Find("Good");
+            TMP_Text goodCompressionText = child.GetComponent<TMP_Text>();
+            goodCompressionText.text += ChestCompression.goodCompressions;
+
+            child = performancePanel.transform.Find("Fast");
+            TMP_Text fastCompressionText = child.GetComponent<TMP_Text>();
+            fastCompressionText.text += ChestCompression.fastCompressions;
+
+            child = performancePanel.transform.Find("Slow");
+            TMP_Text slowCompressionText = child.GetComponent<TMP_Text>();
+            slowCompressionText.text += ChestCompression.slowCompressions;
+
+            child = performancePanel.transform.Find("Mouth");
+            TMP_Text mouthSuccessText = child.GetComponent<TMP_Text>();
+            mouthSuccessText.text += ChestCompression.mouthToMouthSuccesses;
+
+            performancePanel.SetActive(true);
         }
 
         if (ambulanceInstantiated && instantiatedAmbulance != null)

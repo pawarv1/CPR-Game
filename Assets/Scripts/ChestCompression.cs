@@ -40,10 +40,10 @@ public class ChestCompression : MonoBehaviour
 
     private bool waitingForMouthToMouth = false;
     public XRBaseController xrController; 
-    private int goodCompressions = 0;
-    private int fastCompressions = 0;
-    private int slowCompressions = 0;
-    private int mouthToMouthSuccesses = 0;
+    public static int goodCompressions = 0;
+    public static int fastCompressions = 0;
+    public static int slowCompressions = 0;
+    public static int mouthToMouthSuccesses = 0;
 
     public TextMeshProUGUI summaryText; // Link in Inspector
     // public float sessionDuration = 60f; // Total session time in seconds
