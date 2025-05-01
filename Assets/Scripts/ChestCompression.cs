@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 
 public class ChestCompression : MonoBehaviour
@@ -38,6 +39,18 @@ public class ChestCompression : MonoBehaviour
     // public string mouthToMouthKey = "Submit"; // Assign to a button in Input Actions
 
     private bool waitingForMouthToMouth = false;
+    public XRBaseController xrController; 
+    private int goodCompressions = 0;
+    private int fastCompressions = 0;
+    private int slowCompressions = 0;
+    private int mouthToMouthSuccesses = 0;
+
+    public TextMeshProUGUI summaryText; // Link in Inspector
+    // public float sessionDuration = 60f; // Total session time in seconds
+    // private float sessionStartTime;
+    private bool sessionEnded = false;
+
+
 
 
     void Start()
@@ -123,16 +136,22 @@ public class ChestCompression : MonoBehaviour
             {
                 feedbackText.text = "Good!";
                 feedbackText.color = Color.green;
+                TriggerHaptic(0.5f, 0.1f); 
+                goodCompressions++;
             }
             else if (interval < minCompressionInterval)
             {
                 feedbackText.text = "Too Fast!";
                 feedbackText.color = Color.yellow;
+                TriggerHaptic(0.1f, 0.1f); 
+                fastCompressions++;
             }
             else
             {
                 feedbackText.text = "Too Slow!";
                 feedbackText.color = Color.red;
+                TriggerHaptic(0.1f, 0.1f); 
+                slowCompressions++;
             }
         }
         else
@@ -165,6 +184,7 @@ public class ChestCompression : MonoBehaviour
     IEnumerator MouthToMouthSuccess()
     {
         tempCompressionCount = 0;
+        TriggerHaptic(1f, 0.2f);
         mouthToMouthText.text = "Success!";
         mouthToMouthText.color = Color.green;
         waitingForMouthToMouth = false;
@@ -173,4 +193,13 @@ public class ChestCompression : MonoBehaviour
 
         mouthToMouthText.text = "";
     }
+
+    void TriggerHaptic(float amplitude, float duration)
+    {
+        if (xrController != null)
+        {
+            xrController.SendHapticImpulse(amplitude, duration);
+        }
+    }
+
 }
