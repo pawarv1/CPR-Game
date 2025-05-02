@@ -49,6 +49,7 @@ public class Timer : MonoBehaviour
                 Debug.Log("Found controller: " + device.name);
             }
         }
+        timeTillEMTS = Random.Range(30f, 60f);
 
         emtTimerSlider.maxValue = timeTillEMTS;
         emtTimerSlider.value = 0f;
@@ -87,6 +88,8 @@ public class Timer : MonoBehaviour
         
         if (timer >= timeTillEMTS && !ambulanceInstantiated)
         {
+            performancePanel.SetActive(true);
+
 
             instantiatedAmbulance = Instantiate(ambulance, spawnPoint.transform.position, spawnRotation);
             AudioSource audioSource = instantiatedAmbulance.GetComponent<AudioSource>();
@@ -120,7 +123,6 @@ public class Timer : MonoBehaviour
             TMP_Text mouthSuccessText = child.GetComponent<TMP_Text>();
             mouthSuccessText.text += ChestCompression.mouthToMouthSuccesses;
 
-            performancePanel.SetActive(true);
             chestCompression.SetGameStart();
             if (playerInput.actions["Action"].WasPressedThisFrame()) {
                 SceneManager.LoadScene("MenuScreen");

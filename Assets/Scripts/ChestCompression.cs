@@ -8,7 +8,7 @@ using TMPro;
 public class ChestCompression : MonoBehaviour
 {
     public Transform headset;               // Assign VR camera (CenterEyeAnchor)
-     public Transform controller; 
+    public Transform controller; 
     public Collider chestCollider;
     public PlayerInput playerInput;
     public TextMeshProUGUI compressionText;
@@ -56,7 +56,7 @@ public class ChestCompression : MonoBehaviour
     public TextMeshProUGUI mouthText;
     public TextMeshProUGUI percentText;
 
-    [SerializeField] bool gameStart = true;
+    [SerializeField] bool gameStart = false;
     [SerializeField] GameObject tutorialMenu;
 
 
@@ -68,6 +68,8 @@ public class ChestCompression : MonoBehaviour
             lastY = headset.localPosition.y;
         debugText.text = "UGHHHH";
         mouthToMouthText.text = "";
+
+        
 
         
     }
