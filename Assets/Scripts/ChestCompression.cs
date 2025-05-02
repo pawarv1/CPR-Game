@@ -50,11 +50,11 @@ public class ChestCompression : MonoBehaviour
     // private float sessionStartTime;
     private bool sessionEnded = false;
 
-    public TextMeshProUGUI goodText;
-    public TextMeshProUGUI fastText;
-    public TextMeshProUGUI slowText;
-    public TextMeshProUGUI mouthText;
-    public TextMeshProUGUI percentText;
+    // public TextMeshProUGUI goodText;
+    // public TextMeshProUGUI fastText;
+    // public TextMeshProUGUI slowText;
+    // public TextMeshProUGUI mouthText;
+    // public TextMeshProUGUI percentText;
 
     [SerializeField] bool gameStart = false;
     [SerializeField] GameObject tutorialMenu;
@@ -66,7 +66,6 @@ public class ChestCompression : MonoBehaviour
     {
         if (headset != null)
             lastY = headset.localPosition.y;
-        debugText.text = "UGHHHH";
         mouthToMouthText.text = "";
 
         
@@ -98,6 +97,9 @@ public class ChestCompression : MonoBehaviour
 
         float currentControllerY = controller.position.y;
         float deltaY = lastControllerY - currentControllerY;
+        float temp = currentControllerY - lastControllerY;
+
+        // debugText.text = lastControllerY + "\n" + currentControllerY + "\n" + temp; 
 
         if (waitingForMouthToMouth && playerInput.actions["Action"].WasPressedThisFrame())
         {
@@ -107,19 +109,24 @@ public class ChestCompression : MonoBehaviour
         // Optional: Uncomment if you want to check if the controller is over the chest
         // if (chestCollider.bounds.Contains(controller.position))
         // {
-            if (deltaY > compressionThreshold && readyForNextCompression)
-            {
-                RegisterCompression();
-                readyForNextCompression = false;
-            }
+        if (deltaY > compressionThreshold && readyForNextCompression)
+        {
+            RegisterCompression();
+            readyForNextCompression = false;
+        }
 
-            if (currentControllerY - lastControllerY > resetThreshold)
-            {
-                readyForNextCompression = true;
-            }
+        if (currentControllerY - lastControllerY > resetThreshold)
+        {
+            readyForNextCompression = true;
+        }
         // }
 
+        
+
         lastControllerY = currentControllerY;
+
+       
+
 
      
     }
