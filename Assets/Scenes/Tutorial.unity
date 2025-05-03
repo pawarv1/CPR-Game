@@ -796,6 +796,10 @@ PrefabInstance:
       value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 8395638898168488192, guid: 6ae2d973a07ae43128c14edb3d102cbd, type: 3}
+      propertyPath: crowdClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 032afd7910deafd4bace469896b3575f, type: 3}
+    - target: {fileID: 8395638898168488192, guid: 6ae2d973a07ae43128c14edb3d102cbd, type: 3}
       propertyPath: spawnPoint
       value: 
       objectReference: {fileID: 2116375198}
@@ -827,6 +831,10 @@ PrefabInstance:
       propertyPath: performancePanel
       value: 
       objectReference: {fileID: 807051722}
+    - target: {fileID: 8395638898168488192, guid: 6ae2d973a07ae43128c14edb3d102cbd, type: 3}
+      propertyPath: ambulanceSirenClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3e884b962c3b04f94c5bf89d11492c, type: 3}
     - target: {fileID: 9003939687841344606, guid: 6ae2d973a07ae43128c14edb3d102cbd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.7261083
@@ -1985,25 +1993,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headset: {fileID: 0}
   controller: {fileID: 0}
-  chestCollider: {fileID: 0}
   playerInput: {fileID: 200271158}
   compressionText: {fileID: 0}
-  debugText: {fileID: 0}
-  leanInOffset: 0.3
-  leanInKey: 32
+  feedbackText: {fileID: 0}
+  mouthToMouthText: {fileID: 0}
   compressionThreshold: 0.01
   resetThreshold: 0.02
-  feedbackText: {fileID: 0}
   minCompressionInterval: 0.5
   maxCompressionInterval: 0.6
-  mouthToMouthText: {fileID: 0}
   xrController: {fileID: 0}
-  summaryText: {fileID: 0}
-  goodText: {fileID: 0}
-  fastText: {fileID: 0}
-  slowText: {fileID: 0}
-  mouthText: {fileID: 0}
-  percentText: {fileID: 0}
   gameStart: 0
   tutorialMenu: {fileID: 0}
 --- !u!1 &963194225

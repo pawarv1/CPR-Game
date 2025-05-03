@@ -117,7 +117,9 @@ public class MinigameMenu : MonoBehaviour
     public void openMiniGame()
     {
         minigameMenu.SetActive(false);
+        
         minigame.SetActive(true);
+        minigame.GetComponent<MiniGameScript>().RestartGame();
     }
 
     public void goBack()

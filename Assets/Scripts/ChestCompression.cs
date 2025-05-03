@@ -1,63 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 
 public class ChestCompression : MonoBehaviour
 {
-    public Transform headset;               // Assign VR camera (CenterEyeAnchor)
-    public Transform controller; 
-    public Collider chestCollider;
-    public PlayerInput playerInput;
-    public TextMeshProUGUI compressionText;
-    public TextMeshProUGUI debugText;
-    // public TextMeshProUGUI debugText2;
+    [SerializeField] Transform headset;           
+    [SerializeField] Transform controller; 
+    [SerializeField] PlayerInput playerInput;
+    [SerializeField] TextMeshProUGUI compressionText;
+    [SerializeField] TextMeshProUGUI feedbackText;
+    [SerializeField] TextMeshProUGUI mouthToMouthText;
 
-    public float leanInOffset = 0.3f;       // How far to move down
-    public KeyCode leanInKey = KeyCode.Space; // Replace with button mapping if needed
-    private bool hasLeanedIn = false;
-
-    public float compressionThreshold = 0.01f;
-    public float resetThreshold = 0.02f;
+    [SerializeField] float compressionThreshold = 0.01f;
+    [SerializeField] float resetThreshold = 0.02f;
 
     private float lastY;
     private bool readyForNextCompression = true;
     private int compressionCount = 0;
-    private int tempCompressionCount = 0; // Seperate compression count to help with mouth functionality
+    private int tempCompressionCount = 0;
     private float lastControllerY;
 
-    public TextMeshProUGUI feedbackText;
-
-    public float minCompressionInterval = 0.5f;  // 100 cpm
-    public float maxCompressionInterval = 0.6f;  // 120 cpm
+    [SerializeField]  float minCompressionInterval = 0.5f;  // 100 cpm
+    [SerializeField]  float maxCompressionInterval = 0.6f;  // 120 cpm
 
     private float lastCompressionTime = -1f;
 
-    public TextMeshProUGUI mouthToMouthText;
-    // public string mouthToMouthKey = "Submit"; // Assign to a button in Input Actions
 
     private bool waitingForMouthToMouth = false;
-    public XRBaseController xrController; 
-    public static int goodCompressions = 0;
-    public static int fastCompressions = 0;
-    public static int slowCompressions = 0;
-    public static int mouthToMouthSuccesses = 0;
+    [SerializeField] XRBaseController xrController; 
+    private int goodCompressions = 0;
+    private int fastCompressions = 0;
+    private int slowCompressions = 0;
+    private int mouthToMouthSuccesses = 0;
+    private int mouthToMouthFails = 0;
 
-    public TextMeshProUGUI summaryText; // Link in Inspector
-    // public float sessionDuration = 60f; // Total session time in seconds
-    // private float sessionStartTime;
     private bool sessionEnded = false;
 
-    // public TextMeshProUGUI goodText;
-    // public TextMeshProUGUI fastText;
-    // public TextMeshProUGUI slowText;
-    // public TextMeshProUGUI mouthText;
-    // public TextMeshProUGUI percentText;
 
     [SerializeField] bool gameStart = false;
     [SerializeField] GameObject tutorialMenu;
+    private bool gameOver = false;
 
 
 
@@ -80,26 +66,20 @@ public class ChestCompression : MonoBehaviour
             gameStart = true;
         }
 
+
+
+        if (gameOver && playerInput.actions["Action"].WasPressedThisFrame()) SceneManager.LoadScene("MenuScreen");
+
         if (!gameStart) return;
 
 
         compressionText.text = "Compressions: " + compressionCount.ToString();
 
-        // Lean-in check
-        // if (!hasLeanedIn &&
-        //     (
-        //      playerInput.actions["Action"].WasPressedThisFrame()))
-        // {
-        //     LeanIn();
-        // }
-
-        // if (!hasLeanedIn) return;
 
         float currentControllerY = controller.position.y;
         float deltaY = lastControllerY - currentControllerY;
         float temp = currentControllerY - lastControllerY;
 
-        // debugText.text = lastControllerY + "\n" + currentControllerY + "\n" + temp; 
 
         if (waitingForMouthToMouth && playerInput.actions["Action"].WasPressedThisFrame())
         {
@@ -119,9 +99,7 @@ public class ChestCompression : MonoBehaviour
         {
             readyForNextCompression = true;
         }
-        // }
-
-        
+       
 
         lastControllerY = currentControllerY;
 
@@ -131,19 +109,7 @@ public class ChestCompression : MonoBehaviour
      
     }
 
-    void LeanIn()
-    {
-        headset.localPosition -= new Vector3(0, leanInOffset, 0);
-        hasLeanedIn = true;
-        Debug.Log("Leaning in toward patient.");
-    }
-
-    // void RegisterCompression()
-    // {
-    //     compressionCount++;
-    //     Debug.Log($"Compression #{compressionCount}");
-    //     // Add feedback here (animation, sound, etc.)
-    // }
+ 
     void RegisterCompression()
     {
         compressionCount++;
@@ -187,13 +153,13 @@ public class ChestCompression : MonoBehaviour
             TriggerMouthToMouth();
         }
 
+        if (tempCompressionCount >= 35) {
+            TriggerFailMouth();
+        }
+
         Debug.Log($"Compression #{compressionCount}");
     }
 
-    bool IsOverChest(Vector3 position)
-    {
-        return chestCollider.bounds.Contains(position);
-    }
 
     void TriggerMouthToMouth()
     {
@@ -201,6 +167,17 @@ public class ChestCompression : MonoBehaviour
         mouthToMouthText.color = Color.cyan;
         waitingForMouthToMouth = true;
     }
+
+    void TriggerFailMouth() {
+        mouthToMouthText.text = "Failed to give Mouth to Mouth";
+        mouthToMouthText.color = Color.red;
+        waitingForMouthToMouth = false;
+        tempCompressionCount = 0;
+        mouthToMouthFails++;
+        Invoke("ResetMouthText", 3.0f);
+    }
+
+    void ResetMouthText() => mouthToMouthText.text = "";
 
     IEnumerator MouthToMouthSuccess()
     {
@@ -225,15 +202,14 @@ public class ChestCompression : MonoBehaviour
     }
 
     public bool GetGameStart() => gameStart;
-    public void SetGameStart() => gameStart = false;
+    public void SetGameOver() {
+        gameStart = false;
+        gameOver = true;
+    }
 
-    // void ShowScore() {
-    //     goodText.text = "Good: " + goodCompressions;
-    //     fastText.text = "Fast: " + fastCompressions;
-    //     slowText.text = "Slow: " + slowCompressions;
-    //     mouthText.text = "Mouth Successes: " + mouthToMouthSuccesses;
-
-    //     // float score = 
-    // }
+    public int GetGoodCompressions() => goodCompressions;
+    public int GetFastCompressions() => fastCompressions;
+    public int GetSlowCompressions() => slowCompressions;
+    public int GetMouthSuccesses() => mouthToMouthSuccesses;
 
 }

@@ -14,14 +14,15 @@ public class Timer : MonoBehaviour
     public GameObject stoppingPoint;
     [SerializeField] public Quaternion spawnRotation;
     [SerializeField] public AudioClip ambulanceSirenClip;
+    [SerializeField] public AudioClip crowdClip;
     public GameObject firstByStander;
     public GameObject secondByStander;
     private float timer = 0f;
-    private float timeTillEMTS = 30f; //Random.Range(30f, 60f);
+    private float timeTillEMTS = 10f; //Random.Range(30f, 60f);
     private bool ambulanceInstantiated = false;
     private GameObject instantiatedAmbulance;
     private float moveSpeed = 0.1f;
-    private float timeToActivateB = 10f;
+    private float timeToActivateB = 5f;
     private bool BsActivated = false;
     public string scared = "Scared";
     public string yell = "Yell";
@@ -53,6 +54,7 @@ public class Timer : MonoBehaviour
 
         emtTimerSlider.maxValue = timeTillEMTS;
         emtTimerSlider.value = 0f;
+        emtTimerSlider.gameObject.SetActive(true);
     }
 
     void Update()
@@ -62,7 +64,6 @@ public class Timer : MonoBehaviour
         {
             timer += Time.deltaTime;
             emtTimerSlider.value = timer;
-            Debug.Log("Time remaining: " + (timeTillEMTS - timer));
         }
         
         if (bystandersActive)
@@ -104,29 +105,30 @@ public class Timer : MonoBehaviour
                 audioSource.playOnAwake = true;
                 audioSource.Play();
             }
-            Debug.Log("Paramedics have arrived!!");
             ambulanceInstantiated = true;
+
+
 
             Transform child = performancePanel.transform.Find("Good");
             TMP_Text goodCompressionText = child.GetComponent<TMP_Text>();
-            goodCompressionText.text += ChestCompression.goodCompressions;
+            goodCompressionText.text += chestCompression.GetGoodCompressions();
 
             child = performancePanel.transform.Find("Fast");
             TMP_Text fastCompressionText = child.GetComponent<TMP_Text>();
-            fastCompressionText.text += ChestCompression.fastCompressions;
+            fastCompressionText.text += chestCompression.GetFastCompressions();
 
             child = performancePanel.transform.Find("Slow");
             TMP_Text slowCompressionText = child.GetComponent<TMP_Text>();
-            slowCompressionText.text += ChestCompression.slowCompressions;
+            slowCompressionText.text += chestCompression.GetSlowCompressions();
 
             child = performancePanel.transform.Find("Mouth");
             TMP_Text mouthSuccessText = child.GetComponent<TMP_Text>();
-            mouthSuccessText.text += ChestCompression.mouthToMouthSuccesses;
+            mouthSuccessText.text += chestCompression.GetMouthSuccesses();
 
-            chestCompression.SetGameStart();
-            if (playerInput.actions["Action"].WasPressedThisFrame()) {
-                SceneManager.LoadScene("MenuScreen");
-            }
+            chestCompression.SetGameOver();
+            emtTimerSlider.gameObject.SetActive(false);
+
+
         }
 
         if (ambulanceInstantiated && instantiatedAmbulance != null)
@@ -190,6 +192,14 @@ public class Timer : MonoBehaviour
             button.SetActive(true);
         }
         
+        AudioSource audioSource = chestCompression.gameObject.GetComponent<AudioSource>();
+        if (crowdClip != null)
+        {
+            audioSource.clip = crowdClip;
+            audioSource.loop = true;
+            audioSource.playOnAwake = true;
+            audioSource.Play();
+        }
         BsActivated = true;
     }
 
@@ -205,6 +215,13 @@ public class Timer : MonoBehaviour
         {
             Destroy(secondByStander);
             secondByStander = null;
+        }
+
+        AudioSource audioSource = chestCompression.gameObject.GetComponent<AudioSource>();
+        if (crowdClip != null)
+        {
+            
+            audioSource.Stop();
         }
         
         bystandersActive = false;

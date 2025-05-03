@@ -138,25 +138,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headset: {fileID: 684037348422017846}
   controller: {fileID: 2209392519929518600}
-  chestCollider: {fileID: 0}
   playerInput: {fileID: 0}
   compressionText: {fileID: 0}
-  debugText: {fileID: 0}
-  leanInOffset: 0.3
-  leanInKey: 32
+  feedbackText: {fileID: 0}
+  mouthToMouthText: {fileID: 0}
   compressionThreshold: 0.01
   resetThreshold: 0.02
-  feedbackText: {fileID: 0}
   minCompressionInterval: 0.5
   maxCompressionInterval: 0.6
-  mouthToMouthText: {fileID: 0}
   xrController: {fileID: 0}
-  summaryText: {fileID: 0}
-  goodText: {fileID: 0}
-  fastText: {fileID: 0}
-  slowText: {fileID: 0}
-  mouthText: {fileID: 0}
-  percentText: {fileID: 0}
   gameStart: 0
   tutorialMenu: {fileID: 0}
 --- !u!114 &4031999733463980156
