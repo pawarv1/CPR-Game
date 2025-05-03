@@ -2993,8 +2993,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052098263498674131, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101951076624028293, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975367092546156660, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5248521168232784258, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5729950232005769800, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6418050305702121363, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362364680258788349, guid: ed56838fe1b70fd40aa4b52e4333cd7e, type: 3}
