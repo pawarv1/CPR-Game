@@ -111,6 +111,28 @@
                 },
                 {
                     "name": "",
+                    "id": "439942e2-0cad-43a2-acc0-945881d78189",
+                    "path": "<XRController>{RightHand}/thumbstick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb97c813-a78b-4295-9a71-8b49df62b546",
+                    "path": "<XRController>{LeftHand}/thumbstick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "04523e91-b178-4560-a480-73c7a67788b1",
                     "path": "<OculusTouchController>{LeftHand}/gripPressed",
                     "interactions": "",
@@ -144,6 +166,39 @@
                 },
                 {
                     "name": "",
+                    "id": "2d469932-4edf-486d-992c-6dd06b020c47",
+                    "path": "<XRController>{RightHand}/triggerButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "158b280d-96d2-4385-9fe3-7c5369fd3dd0",
+                    "path": "<XRController>{LeftHand}/triggerButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5054d531-2ca2-4263-8e2b-a897e3ff25fb",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "93e62f49-b3a9-4f25-89f5-77fb38723a9e",
                     "path": "<XRController>{LeftHand}/primaryButton",
                     "interactions": "",
@@ -155,8 +210,41 @@
                 },
                 {
                     "name": "",
+                    "id": "6e5195b6-0b92-408f-bcb0-ae7ab49c45b9",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a1b04d3-9eec-4185-9b72-e4a00ce38f78",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "28a4cc6f-3f84-4903-9c0a-63cd243848f7",
                     "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb95d504-6cae-4286-a194-abbdf7bd3206",
+                    "path": "<XRController>{RightHand}/secondaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

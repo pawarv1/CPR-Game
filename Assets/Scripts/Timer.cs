@@ -9,39 +9,56 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
+    // Ambulance-related objects
     public GameObject ambulance;
     public GameObject spawnPoint;
     public GameObject stoppingPoint;
     [SerializeField] public Quaternion spawnRotation;
     [SerializeField] public AudioClip ambulanceSirenClip;
     [SerializeField] public AudioClip crowdClip;
+
+    // Bystanders and their animation triggers
     public GameObject firstByStander;
     public GameObject secondByStander;
+    public string scared = "Scared";
+    public string yell = "Yell";
+
+    // Timer values
     private float timer = 0f;
-    private float timeTillEMTS = 10f; //Random.Range(30f, 60f);
+    private float timeTillEMTS = 10f; // This will be randomized in Start()
+
+    // Ambulance tracking
     private bool ambulanceInstantiated = false;
     private GameObject instantiatedAmbulance;
     private float moveSpeed = 0.1f;
-    private float timeToActivateB = 5f;
+
+    // Bystander activation
+    private float timeToActivateB = 10f;
     private bool BsActivated = false;
-    public string scared = "Scared";
-    public string yell = "Yell";
+    private bool bystandersActive = false;
+
+    // UI elements
     public GameObject button;
     public GameObject performancePanel;
+    public Slider emtTimerSlider;
+
+    // VR Input
     private List<UnityEngine.XR.InputDevice> inputDevices = new List<UnityEngine.XR.InputDevice>();
 
-    private bool bystandersActive = false;
-    public Slider emtTimerSlider;
+    // Compression script and player input reference
     [SerializeField] ChestCompression chestCompression;
     [SerializeField] PlayerInput playerInput;
 
     void Start()
     {
+        // Hide performance panel at start
         performancePanel.SetActive(false);
-        Debug.Log("Time remaining: " + (timeTillEMTS - timer));
+
+        // Hide bystanders initially
         if (firstByStander != null) firstByStander.SetActive(false);
         if (secondByStander != null) secondByStander.SetActive(false);
-        
+
+        // Log VR controllers found
         InputDevices.GetDevices(inputDevices);
         foreach (var device in inputDevices)
         {
@@ -50,8 +67,9 @@ public class Timer : MonoBehaviour
                 Debug.Log("Found controller: " + device.name);
             }
         }
-        timeTillEMTS = Random.Range(30f, 60f);
 
+        // Randomize ambulance arrival time and setup UI slider
+        timeTillEMTS = Random.Range(30f, 60f);
         emtTimerSlider.maxValue = timeTillEMTS;
         emtTimerSlider.value = 0f;
         emtTimerSlider.gameObject.SetActive(true);
@@ -59,45 +77,40 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        
+        // Increase timer only if game has started
         if (timeTillEMTS - timer > 0 && chestCompression.GetGameStart())
         {
             timer += Time.deltaTime;
             emtTimerSlider.value = timer;
         }
-        
+
+        // Handle bystander deletion input
         if (bystandersActive)
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.B))
             {
                 DeleteBystanders();
             }
-            
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                DeleteBystanders();
-            }
-            
-            CheckOculusControllerInput();
+
+            CheckOculusControllerInput(); // VR input support
         }
-        
+
+        // Activate bystanders after a set time
         if (timer >= timeToActivateB && !BsActivated)
         {
             ActivateObjectsWithAnimation();
             bystandersActive = true;
         }
-        
+
+        // Spawn ambulance and show performance UI when timer is up
         if (timer >= timeTillEMTS && !ambulanceInstantiated)
         {
             performancePanel.SetActive(true);
 
-
+            // Instantiate ambulance and play siren
             instantiatedAmbulance = Instantiate(ambulance, spawnPoint.transform.position, spawnRotation);
             AudioSource audioSource = instantiatedAmbulance.GetComponent<AudioSource>();
-            if (audioSource == null)
-            {
-                audioSource = instantiatedAmbulance.AddComponent<AudioSource>();
-            }
+            if (audioSource == null) audioSource = instantiatedAmbulance.AddComponent<AudioSource>();
             if (ambulanceSirenClip != null)
             {
                 audioSource.clip = ambulanceSirenClip;
@@ -107,8 +120,7 @@ public class Timer : MonoBehaviour
             }
             ambulanceInstantiated = true;
 
-
-
+            // Display compression performance stats
             Transform child = performancePanel.transform.Find("Good");
             TMP_Text goodCompressionText = child.GetComponent<TMP_Text>();
             goodCompressionText.text += chestCompression.GetGoodCompressions();
@@ -125,19 +137,20 @@ public class Timer : MonoBehaviour
             TMP_Text mouthSuccessText = child.GetComponent<TMP_Text>();
             mouthSuccessText.text += chestCompression.GetMouthSuccesses();
 
+            // End game logic
             chestCompression.SetGameOver();
             emtTimerSlider.gameObject.SetActive(false);
-
-
         }
 
+        // Move ambulance to the stopping point smoothly
         if (ambulanceInstantiated && instantiatedAmbulance != null)
         {
             float step = moveSpeed * Time.deltaTime;
             instantiatedAmbulance.transform.position = Vector3.Lerp(instantiatedAmbulance.transform.position, stoppingPoint.transform.position, step);
         }
     }
-    
+
+    // Check for VR button input to remove bystanders
     private void CheckOculusControllerInput()
     {
         if (inputDevices.Count == 0)
@@ -164,7 +177,7 @@ public class Timer : MonoBehaviour
         }
     }
 
-    
+    // Enable bystanders and play animations and crowd audio
     private void ActivateObjectsWithAnimation()
     {
         if (firstByStander != null)
@@ -191,7 +204,8 @@ public class Timer : MonoBehaviour
         {
             button.SetActive(true);
         }
-        
+
+        // Play crowd audio from chestCompression's AudioSource
         AudioSource audioSource = chestCompression.gameObject.GetComponent<AudioSource>();
         if (crowdClip != null)
         {
@@ -200,9 +214,11 @@ public class Timer : MonoBehaviour
             audioSource.playOnAwake = true;
             audioSource.Play();
         }
+
         BsActivated = true;
     }
 
+    // Destroys bystander game objects and stops crowd audio
     public void DeleteBystanders()
     {
         if (firstByStander != null)
@@ -210,7 +226,7 @@ public class Timer : MonoBehaviour
             Destroy(firstByStander);
             firstByStander = null;
         }
-        
+
         if (secondByStander != null)
         {
             Destroy(secondByStander);
@@ -220,12 +236,9 @@ public class Timer : MonoBehaviour
         AudioSource audioSource = chestCompression.gameObject.GetComponent<AudioSource>();
         if (crowdClip != null)
         {
-            
             audioSource.Stop();
         }
-        
+
         bystandersActive = false;
     }
 }
-
-

@@ -7,34 +7,40 @@ using UnityEngine.InputSystem;
 
 public class MiniGameScript : MonoBehaviour
 {
+    // UI references and minigame objects
     [SerializeField] private GameObject minigame;
     [SerializeField] private GameObject miniGameMenu;
-
     [SerializeField] private PlayerInput playerInput;
+
     public Button goBackButton;
     public Button restartButton;
     public TMP_Text timerText;
     public TMP_Text compressionText;
     public TMP_Text feedbackText;
 
+    // Streak tracking
     private int currentStreak = 0;
     private int maxStreak = 0;
     [SerializeField] private TMP_Text streakText;
     [SerializeField] private TMP_Text maxStreakText;
 
+    // Compression and timing variables
     private int numCompressions;
     private float timer;
     private float lastCompressionTime;
     private float currentCompressionInterval;
 
-    private const float MIN_COMPRESSION_INTERVAL = 0.5f; // Too fast if < 0.5s
-    private const float MAX_COMPRESSION_INTERVAL = 1.5f; // Too slow if > 1.5s
+    // Compression timing limits
+    private const float MIN_COMPRESSION_INTERVAL = 0.5f; // Below this = too fast
+    private const float MAX_COMPRESSION_INTERVAL = 1.5f; // Above this = too slow
 
+    // Enum to represent the game state
     private enum GameState { Idle, Running, Ended }
     private GameState currentState = GameState.Idle;
 
     void Start()
     {
+        // Initialize values and set up button listeners
         numCompressions = 0;
         timer = 60f;
         feedbackText.text = "";
@@ -46,6 +52,7 @@ public class MiniGameScript : MonoBehaviour
 
     private void Update()
     {
+        // Start or register compression based on input
         if (playerInput.actions["Action"].WasPressedThisFrame())
         {
             if (currentState == GameState.Idle)
@@ -59,6 +66,7 @@ public class MiniGameScript : MonoBehaviour
             }
         }
 
+        // Timer countdown while game is running
         if (currentState == GameState.Running)
         {
             timer -= Time.deltaTime;
@@ -69,21 +77,19 @@ public class MiniGameScript : MonoBehaviour
             }
         }
 
+        // Go back to main menu if Back input is pressed
         if (playerInput.actions["Back"].WasPressedThisFrame())
         {
             GoBack();
         }
 
-        if (playerInput.actions["Select"].WasPressedThisFrame())
-        {
-            RestartGame();
-        }
-
+        // Refresh UI every frame
         UpdateUI();
     }
 
     private void StartGame()
     {
+        // Begin minigame, reset values
         currentState = GameState.Running;
         timer = 60f;
         numCompressions = 0;
@@ -93,13 +99,14 @@ public class MiniGameScript : MonoBehaviour
 
     private void EndGame()
     {
+        // Stop the game and show final feedback
         currentState = GameState.Ended;
         feedbackText.text = "Time's up!\nMax Streak: " + maxStreak;
-        // maxStreakText.text = "Max Streak: " + maxStreak;
     }
 
     public void RestartGame()
     {
+        // Reset game to idle state and prepare to start again
         currentState = GameState.Idle;
         timer = 60f;
         numCompressions = 0;
@@ -109,6 +116,7 @@ public class MiniGameScript : MonoBehaviour
 
     private void RegisterCompression()
     {
+        // Calculate time between compressions and give feedback
         float now = Time.time;
         currentCompressionInterval = now - lastCompressionTime;
         string feedback = "";
@@ -130,7 +138,7 @@ public class MiniGameScript : MonoBehaviour
             currentStreak++;
             if (currentStreak > 1)
                 feedback += " x" + currentStreak;
-            
+
             if (currentStreak > maxStreak)
                 maxStreak = currentStreak;
         }
@@ -138,18 +146,18 @@ public class MiniGameScript : MonoBehaviour
         lastCompressionTime = now;
         compressionText.text = "Number of chest compressions: " + numCompressions;
         feedbackText.text = feedback;
-
-        // streakText.text = "Streak: " + currentStreak;
     }
 
     private void GoBack()
     {
+        // Exit minigame and return to menu
         minigame.SetActive(false);
         miniGameMenu.SetActive(true);
     }
 
     private void UpdateUI()
     {
+        // Update timer and compression text on screen
         timerText.text = "Time Remaining: " + Mathf.CeilToInt(timer);
         compressionText.text = "Number of chest compressions: " + numCompressions;
     }
